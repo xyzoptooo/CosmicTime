@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, RotateCcw, Settings } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 type TimerMode = "focus" | "shortBreak" | "longBreak";
 
@@ -17,7 +16,6 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
   const [isActive, setIsActive] = useState(false);
   const [completedSessions, setCompletedSessions] = useState(0);
-  const { toast } = useToast();
 
   const durations = {
     focus: 25 * 60,
@@ -56,18 +54,13 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
       const nextMode = newCompletedSessions % 4 === 0 ? "longBreak" : "shortBreak";
       switchMode(nextMode);
       
-      toast({
-        title: "Focus session completed! 🎉",
-        description: `Great work! Time for a ${nextMode === "longBreak" ? "long" : "short"} break.`,
-      });
+      // Show completion message in console
+      console.log(`Focus session completed! Time for a ${nextMode === "longBreak" ? "long" : "short"} break.`);
     } else {
       switchMode("focus");
-      toast({
-        title: "Break time's over! ⚡",
-        description: "Ready to focus again?",
-      });
+      console.log("Break time's over! Ready to focus again?");
     }
-  }, [mode, completedSessions, switchMode, toast, onSessionComplete]);
+  }, [mode, completedSessions, switchMode, onSessionComplete]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
