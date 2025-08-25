@@ -13,4 +13,3 @@
 - [x] Fix DailyProgress component imports
 - [x] Fix App.tsx to pass required props
 - [x] Fix TypeScript compilation errors
- new 
