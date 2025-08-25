@@ -1,68 +1,168 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Cosmic Focus Design System - Deep space theme with glowing accents */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    /* Core cosmic theme */
+    --background: 230 30% 6%;
+    --foreground: 210 40% 90%;
+
+    /* Card/surface colors */
+    --card: 230 25% 9%;
+    --card-foreground: 210 40% 90%;
+
+    --popover: 230 25% 9%;
+    --popover-foreground: 210 40% 90%;
+
+    /* Cosmic primary - warm stellar gold */
+    --primary: 45 85% 65%;
+    --primary-foreground: 230 30% 6%;
+    --primary-glow: 45 85% 75%;
+
+    /* Secondary - nebula purple */
+    --secondary: 270 60% 25%;
+    --secondary-foreground: 210 40% 90%;
+
+    /* Muted space gray */
+    --muted: 230 20% 15%;
+    --muted-foreground: 210 15% 60%;
+
+    /* Accent - cosmic blue */
+    --accent: 200 80% 50%;
+    --accent-foreground: 230 30% 6%;
+
+    /* Destructive - red giant */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 210 40% 90%;
+
+    /* Borders and inputs */
+    --border: 230 20% 20%;
+    --input: 230 20% 18%;
+    --ring: 45 85% 65%;
+
+    /* Timer specific colors */
+    --timer-bg: 230 25% 12%;
+    --timer-accent: 45 85% 65%;
+    --focus-color: 45 85% 65%;
+    --break-color: 120 60% 50%;
+    --pause-color: 200 80% 50%;
+
+    /* Particle colors */
+    --particle-primary: 45 85% 65%;
+    --particle-secondary: 200 80% 50%;
+    --particle-tertiary: 270 60% 50%;
+
+    /* Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(230 30% 6%), hsl(230 25% 9%), hsl(270 60% 15%));
+    --gradient-stellar: linear-gradient(45deg, hsl(45 85% 65%), hsl(45 85% 75%));
+    --gradient-nebula: linear-gradient(135deg, hsl(270 60% 25%), hsl(200 80% 30%));
+
+    /* Shadows and glows */
+    --shadow-cosmic: 0 10px 40px -10px hsl(230 30% 3%);
+    --glow-primary: 0 0 30px hsl(45 85% 65% / 0.3);
+    --glow-accent: 0 0 20px hsl(200 80% 50% / 0.2);
+
+    /* Animation speeds */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease-out;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  a:hover {
-    color: #747bff;
+
+  .dark {
+    /* Dark mode uses same cosmic theme */
+    --background: 230 30% 6%;
+    --foreground: 210 40% 90%;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-hidden;
+    background: var(--gradient-cosmic);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Cosmic particles container */
+  .particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  /* Timer glow effects */
+  .timer-glow {
+    box-shadow: var(--glow-primary);
+  }
+
+  .focus-mode {
+    box-shadow: 0 0 40px hsl(var(--focus-color) / 0.4);
+  }
+
+  .break-mode {
+    box-shadow: 0 0 40px hsl(var(--break-color) / 0.4);
+  }
+
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--timer-accent) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--timer-accent) / 0.6);
+    }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent));
+    border-radius: 4px;
   }
 }
