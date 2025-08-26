@@ -3,7 +3,7 @@ import ParticleBackground from "@/components/ParticleBackground";
 import PomodoroTimer from "@/components/PomodoroTimer";
 import AmbientAudioMixer from "@/components/AmbientAudioMixer";
 import DailyProgress from "@/components/DailyProgress";
-import SpotifyIntegration from "@/components/SpotifyIntegration";
+import SpotifyIntegration from "@/components/SpotifyIntergration";
 import SettingsPanel from "@/components/SettingsPanel";
 import AuthModal from "@/components/AuthModal";
 import { Card } from "@/components/ui/card";
@@ -21,7 +21,8 @@ const Index = () => {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const handleModeChange = (mode: TimerMode, isActive: boolean) => {
+const handleModeChange = (mode: TimerMode, isActive: boolean) => {
+    console.log(`Mode changed to: ${mode}, Timer active: ${isActive}`);
     setCurrentMode(mode);
     setIsTimerActive(isActive);
   };

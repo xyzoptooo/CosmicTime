@@ -63,7 +63,29 @@ const AmbientAudioMixer = () => {
 
   // Initialize Web Audio API
   useEffect(() => {
-    const initAudio = async () => {
+const initAudio = async () => {
+    // Resume the AudioContext on user interaction
+    const resumeAudioContext = () => {
+        if (audioContextRef.current) {
+            audioContextRef.current.resume().then(() => {
+                console.log("AudioContext resumed");
+            });
+            window.removeEventListener("click", resumeAudioContext);
+        }
+    };
+
+    window.addEventListener("click", resumeAudioContext);
+    // Resume the AudioContext on user interaction
+    const resumeAudioContext = () => {
+        if (audioContextRef.current) {
+            audioContextRef.current.resume().then(() => {
+                console.log("AudioContext resumed");
+            });
+            window.removeEventListener("click", resumeAudioContext);
+        }
+    };
+
+    window.addEventListener("click", resumeAudioContext);
       try {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
         masterGainNodeRef.current = audioContextRef.current.createGain();
