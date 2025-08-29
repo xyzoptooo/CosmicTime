@@ -8,6 +8,7 @@ interface Particle {
   size: number;
   opacity: number;
   color: string;
+  twinklePhase: number;
 }
 
 const ParticleBackground = () => {
@@ -29,37 +30,35 @@ const ParticleBackground = () => {
     };
 
     const initParticles = () => {
-      const particleCount = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+      const particleCount = Math.min(120, Math.floor((canvas.width * canvas.height) / 12000));
       particlesRef.current = [];
 
-      const colors = ['#f0dc82', '#5bc0de', '#a855f7', '#22d3ee', '#fbbf24'];
+      const colors = ['#f0dc82', '#5bc0de', '#a855f7', '#22d3ee', '#fbbf24', '#bb86fc', '#03dac6'];
 
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.5 + 0.2,
+          vx: (Math.random() - 0.5) * 0.7,
+          vy: (Math.random() - 0.5) * 0.7,
+          size: Math.random() * 4 + 1.5,
+          opacity: Math.random() * 0.5 + 0.3,
           color: colors[Math.floor(Math.random() * colors.length)],
+          twinklePhase: Math.random() * Math.PI * 2,
         });
       }
     };
 
     const drawParticle = (particle: Particle) => {
       ctx.save();
-      ctx.globalAlpha = particle.opacity;
+      // Twinkle effect
+      const twinkle = 0.3 * Math.sin(Date.now() * 0.005 + particle.twinklePhase);
+      ctx.globalAlpha = Math.min(1, Math.max(0.1, particle.opacity + twinkle));
       ctx.fillStyle = particle.color;
+      ctx.shadowColor = particle.color;
+      ctx.shadowBlur = particle.size * 3;
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Add a subtle glow effect
-      ctx.shadowColor = particle.color;
-      ctx.shadowBlur = particle.size * 2;
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     };
@@ -73,12 +72,15 @@ const ParticleBackground = () => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
-            const opacity = (150 - distance) / 150 * 0.1;
+          if (distance < 180) {
+            const opacity = (180 - distance) / 180 * 0.15;
+            const gradient = ctx.createLinearGradient(particles[i].x, particles[i].y, particles[j].x, particles[j].y);
+            gradient.addColorStop(0, particles[i].color);
+            gradient.addColorStop(1, particles[j].color);
             ctx.save();
             ctx.globalAlpha = opacity;
-            ctx.strokeStyle = '#f0dc82';
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -98,8 +100,8 @@ const ParticleBackground = () => {
         const dy = mouseRef.current.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 200) {
-          const force = (200 - distance) / 200 * 0.01;
+        if (distance < 220) {
+          const force = (220 - distance) / 220 * 0.015;
           particle.vx += (dx / distance) * force;
           particle.vy += (dy / distance) * force;
         }
@@ -121,12 +123,8 @@ const ParticleBackground = () => {
         particle.y = Math.max(0, Math.min(canvas.height, particle.y));
 
         // Add some friction
-        particle.vx *= 0.99;
-        particle.vy *= 0.99;
-
-        // Subtle opacity animation
-        particle.opacity += Math.sin(Date.now() * 0.001 + particle.x * 0.01) * 0.002;
-        particle.opacity = Math.max(0.1, Math.min(0.7, particle.opacity));
+        particle.vx *= 0.98;
+        particle.vy *= 0.98;
       });
     };
 
