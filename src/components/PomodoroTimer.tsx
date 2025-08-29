@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, Clock, Zap, Coffee } from "lucide-react";
 
 type TimerMode = "focus" | "shortBreak" | "longBreak";
 
@@ -18,6 +18,7 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
   const [completedSessions, setCompletedSessions] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pulseEffect, setPulseEffect] = useState(false);
   const timerRef = useRef<HTMLDivElement>(null);
 
   const durations = {
@@ -30,6 +31,12 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
     focus: "Focus",
     shortBreak: "Short Break",
     longBreak: "Long Break",
+  };
+
+  const modeIcons = {
+    focus: Zap,
+    shortBreak: Coffee,
+    longBreak: Clock,
   };
 
   const formatTime = (seconds: number) => {
@@ -86,6 +93,12 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((time) => time - 1);
+        
+        // Add subtle pulse effect every second
+        if (timeLeft % 5 === 0) {
+          setPulseEffect(true);
+          setTimeout(() => setPulseEffect(false), 100);
+        }
       }, 1000);
     } else if (timeLeft === 0) {
       handleComplete();
