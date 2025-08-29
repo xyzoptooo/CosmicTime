@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, RotateCcw, Sparkles } from "lucide-react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 type TimerMode = "focus" | "shortBreak" | "longBreak";
 
@@ -82,6 +82,21 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
+
+    if (isActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((time) => time - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      handleComplete();
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActive, timeLeft, handleComplete]);
+
+  useEffect(() => {
     onModeChange?.(mode, isActive);
   }, [mode, isActive, onModeChange]);
 
@@ -96,11 +111,39 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
 
   const progress = ((durations[mode] - timeLeft) / durations[mode]) * 100;
 
+  // Generate confetti particles
+  const renderConfetti = () => {
+    if (!showConfetti) return null;
+    
+    const particles = [];
+    for (let i = 0; i < 20; i++) {
+      particles.push(
+        <div
+          key={i}
+          className="confetti"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 0.5}s`,
+            background: `linear-gradient(45deg, #f0dc82, #5bc0de, #a855f7)`,
+          }}
+        />
+      );
+    }
+    return particles;
+  };
+
   return (
-    <Card className={`
-      relative p-8 bg-timer-bg border-border/50 backdrop-blur-sm
-      transition-all duration-500
-    `}>
+    <Card 
+      ref={timerRef}
+      className={`
+        relative p-8 bg-timer-bg border-border/50 backdrop-blur-sm
+        transition-all duration-500 mode-transition
+        ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}
+      `}
+    >
+      {/* Confetti celebration */}
+      {renderConfetti()}
+
       {/* Progress ring background */}
       <div className="absolute inset-0 rounded-lg">
         <svg className="w-full h-full" viewBox="0 0 100 100">
@@ -143,10 +186,10 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
               onClick={() => switchMode(timerMode)}
               disabled={isActive}
               className={`
-                text-xs font-medium transition-all duration-300
+                text-xs font-medium transition-all duration-300 btn-hover-scale
                 ${mode === timerMode 
-                  ? 'bg-primary text-primary-foreground shadow-glow-primary' 
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-glow-primary glow-primary' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/20'
                 }
               `}
             >
@@ -166,7 +209,7 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
           </div>
           
           {mode === 'focus' && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs animate-subtle-bounce">
               Session {completedSessions + 1}
             </Badge>
           )}
@@ -178,10 +221,10 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
             onClick={toggleTimer}
             size="lg"
             className={`
-              px-8 py-3 font-semibold transition-all duration-300
+              px-8 py-3 font-semibold transition-all duration-300 btn-hover-scale
               ${isActive 
                 ? 'bg-timer-pause text-background hover:bg-timer-pause/90' 
-                : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary'
+                : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary glow-primary'
               }
             `}
           >
@@ -202,7 +245,7 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
             onClick={resetTimer}
             variant="outline"
             size="lg"
-            className="px-6 border-border/50 hover:border-border"
+            className="px-6 border-border/50 hover:border-border btn-hover-scale"
           >
             <RotateCcw className="w-5 h-5" />
           </Button>
