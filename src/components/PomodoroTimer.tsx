@@ -53,35 +53,35 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
       setCompletedSessions(newCompletedSessions);
       onSessionComplete?.(newCompletedSessions);
       
+      // Show celebration effect
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+      
       // Auto-switch to break mode
       const nextMode = newCompletedSessions % 4 === 0 ? "longBreak" : "shortBreak";
-      switchMode(nextMode);
+      
+      // Smooth mode transition
+      setIsTransitioning(true);
+      setTimeout(() => {
+        switchMode(nextMode);
+        setIsTransitioning(false);
+      }, 500);
       
       // Show completion message in console
       console.log(`Focus session completed! Time for a ${nextMode === "longBreak" ? "long" : "short"} break.`);
     } else {
-      switchMode("focus");
+      // Smooth transition back to focus
+      setIsTransitioning(true);
+      setTimeout(() => {
+        switchMode("focus");
+        setIsTransitioning(false);
+      }, 500);
       console.log("Break time's over! Ready to focus again?");
     }
   }, [mode, completedSessions, switchMode, onSessionComplete]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((time) => time - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      handleComplete();
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isActive, timeLeft, handleComplete]);
-
-  useEffect(() => {
     onModeChange?.(mode, isActive);
   }, [mode, isActive, onModeChange]);
 
