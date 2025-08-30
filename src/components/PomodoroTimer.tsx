@@ -115,11 +115,19 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
 
   const toggleTimer = () => {
     setIsActive(!isActive);
+    if (!isActive) {
+      // Add subtle scale effect when starting
+      setPulseEffect(true);
+      setTimeout(() => setPulseEffect(false), 300);
+    }
   };
 
   const resetTimer = () => {
     setIsActive(false);
     setTimeLeft(durations[mode]);
+    // Add reset animation effect
+    setPulseEffect(true);
+    setTimeout(() => setPulseEffect(false), 300);
   };
 
   const progress = ((durations[mode] - timeLeft) / durations[mode]) * 100;
@@ -145,15 +153,21 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
     return particles;
   };
 
+  const ModeIcon = modeIcons[mode];
+
   return (
     <Card 
       ref={timerRef}
       className={`
         relative p-8 bg-timer-bg border-border/50 backdrop-blur-sm
-        transition-all duration-500 mode-transition
+        transition-all duration-500 mode-transition cosmic-card
         ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}
+        ${pulseEffect ? 'animate-pulse-glow' : ''}
+        hover:shadow-xl hover:border-primary/20
       `}
     >
+      {/* Background gradient overlay */}
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-60" />
       {/* Confetti celebration */}
       {renderConfetti()}
 
@@ -189,6 +203,22 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
       </div>
 
       <div className="relative z-10 text-center space-y-6">
+        {/* Mode icon and title */}
+        <div className="flex flex-col items-center space-y-2">
+          <div className={`p-3 rounded-full bg-gradient-to-br ${
+            mode === 'focus' 
+              ? 'from-primary/20 to-primary/40' 
+              : 'from-accent/20 to-accent/40'
+          } backdrop-blur-sm`}>
+            <ModeIcon className={`w-6 h-6 ${
+              mode === 'focus' ? 'text-primary' : 'text-accent'
+            }`} />
+          </div>
+          <h2 className="text-lg font-semibold text-foreground/90">
+            {modeLabels[mode]} Mode
+          </h2>
+        </div>
+
         {/* Mode tabs */}
         <div className="flex justify-center space-x-2">
           {(Object.keys(modeLabels) as TimerMode[]).map((timerMode) => (

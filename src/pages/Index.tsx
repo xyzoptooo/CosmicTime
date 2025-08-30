@@ -6,6 +6,7 @@ import DailyProgress from "@/components/DailyProgress";
 import SpotifyIntegration from "@/components/SpotifyIntergration";
 import SettingsPanel from "@/components/SettingsPanel";
 import AuthModal from "@/components/AuthModal";
+import TaskList from "@/components/TaskList";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -245,11 +246,15 @@ const Index = () => {
                 </div>
               </div>
             </Card>
+
+            <div className="animate-fade-in" style={{ animationDelay: "1.4s" }}>
+              <TaskList />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: "1.4s" }}>
+        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: "1.6s" }}>
           <p className="text-xs text-muted-foreground/60">
             Built for deep focus and productivity • Inspired by the cosmos • Enhanced with Wonderspace features
           </p>

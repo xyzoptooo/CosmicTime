@@ -135,7 +135,29 @@
   }
 
   .animate-pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
+    animation: pulseGlow 0.3s ease-out;
+  }
+
+  .cosmic-card {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--timer-bg) / 0.8),
+      hsl(var(--timer-bg) / 0.6)
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border) / 0.3);
+    box-shadow: 
+      0 8px 32px hsl(var(--primary) / 0.1),
+      0 2px 8px hsl(var(--primary) / 0.05),
+      inset 0 1px 0 hsl(var(--primary) / 0.1);
+  }
+
+  .cosmic-card:hover {
+    box-shadow: 
+      0 12px 40px hsl(var(--primary) / 0.15),
+      0 4px 12px hsl(var(--primary) / 0.08),
+      inset 0 1px 0 hsl(var(--primary) / 0.15);
+    transform: translateY(-2px);
   }
 
   .animate-float {
