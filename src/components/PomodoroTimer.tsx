@@ -193,7 +193,7 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
             strokeLinecap="round"
             strokeDasharray={`${2 * Math.PI * 45}`}
             strokeDashoffset={`${2 * Math.PI * 45 * (1 - progress / 100)}`}
-            className="transition-all duration-1000 opacity-60"
+            className="transition-all duration-1000 opacity-60 glow-primary"
             style={{
               transform: 'rotate(-90deg)',
               transformOrigin: '50% 50%',
@@ -246,7 +246,7 @@ const PomodoroTimer = ({ onModeChange, onSessionComplete }: PomodoroTimerProps) 
           <div className={`
             text-6xl font-bold font-mono tracking-wider
             ${mode === 'focus' ? 'text-timer-focus' : 'text-timer-break'}
-            transition-colors duration-500
+            transition-colors duration-500 [text-shadow:0_0_15px_var(--primary-glow)]
           `}>
             {formatTime(timeLeft)}
           </div>

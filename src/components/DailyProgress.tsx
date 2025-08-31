@@ -154,7 +154,7 @@ const DailyProgress = ({ user, completedSessions }: DailyProgressProps) => {
               <span>Your Day: 00:00-23:59</span>
               <span className="text-muted-foreground">Click bar to edit schedule</span>
             </div>
-            <Progress value={todayProgress} className="h-2" />
+            <Progress value={todayProgress} className="h-2 animate-pulse" />
           </div>
         </div>
       </Card>

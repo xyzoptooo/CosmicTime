@@ -112,7 +112,7 @@ const SpotifyIntegration = () => {
 
               {/* Playback Progress */}
               <div className="w-full bg-border/30 rounded-full h-1">
-                <div className="bg-accent h-1 rounded-full w-1/3 transition-all duration-1000" />
+                <div className="bg-accent h-1 rounded-full w-1/3 transition-all duration-1000 animate-pulse" />
               </div>
             </div>
 

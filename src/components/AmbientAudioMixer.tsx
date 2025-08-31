@@ -210,11 +210,11 @@ const AmbientAudioMixer = () => {
   };
 
   return (
-    <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50">
-      <div className="space-y-6">
+    <Card className="p-4 bg-card/80 backdrop-blur-sm border-border/50">
+      <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Ambient Sounds</h3>
+          <h3 className="text-base font-semibold text-foreground">Ambient Sounds</h3>
           <Button
             variant="ghost"
             size="sm"
@@ -226,9 +226,9 @@ const AmbientAudioMixer = () => {
         </div>
 
         {/* Master Volume */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-foreground">Master Volume</span>
+            <span className="text-xs font-medium text-foreground">Master Volume</span>
             <span className="text-xs text-muted-foreground">{masterVolume[0]}%</span>
           </div>
           <Slider
@@ -241,14 +241,14 @@ const AmbientAudioMixer = () => {
         </div>
 
         {/* Individual Tracks */}
-        <div className="space-y-4">
-          <div className="text-sm font-medium text-foreground">Sound Layers</div>
+        <div className="space-y-3">
+          <div className="text-xs font-medium text-foreground">Sound Layers</div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {tracks.map((track) => (
-              <div key={track.id} className="space-y-2">
+              <div key={track.id} className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1.5">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -256,14 +256,14 @@ const AmbientAudioMixer = () => {
                       className={`
                         p-1 h-auto transition-colors duration-200
                         ${trackMuted[track.id] 
-                          ? 'text-muted-foreground' 
+                          ? 'text-muted-foreground/50' 
                           : 'text-primary'
                         }
                       `}
                     >
                       {track.icon}
                     </Button>
-                    <span className="text-sm text-foreground">{track.name}</span>
+                    <span className="text-xs text-foreground">{track.name}</span>
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {trackMuted[track.id] ? '0' : trackVolumes[track.id] || 0}%
@@ -283,9 +283,9 @@ const AmbientAudioMixer = () => {
           </div>
         </div>
         
-        <div className="pt-4 border-t border-border/30">
+        <div className="pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground text-center">
-            Layer different ambient sounds to create your perfect focus environment
+            Create your perfect focus environment
           </p>
         </div>
       </div>
